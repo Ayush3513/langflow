@@ -35,28 +35,28 @@ export const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const data = await langflowService.fetchData('Generate dashboard data including trends, pie chart data, and bar chart data');
-        console.log('Fetched dashboard data:', data);
+  // useEffect(() => {
+  //   const fetchDashboardData = async () => {
+  //     try {
+  //       const data = await langflowService.fetchData('Generate dashboard data including trends, pie chart data, and bar chart data');
+  //       console.log('Fetched dashboard data:', data);
         
-        if (!data?.pieData || !data?.trendData || !data?.barData) {
-          console.warn('Invalid data structure received:', data);
-          return;
-        }
+  //       if (!data?.pieData || !data?.trendData || !data?.barData) {
+  //         console.warn('Invalid data structure received:', data);
+  //         return;
+  //       }
 
-        setDashboardData(data);
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-        setError('Failed to load dashboard data');
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       setDashboardData(data);
+  //     } catch (error) {
+  //       console.error('Error fetching dashboard data:', error);
+  //       setError('Failed to load dashboard data');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchDashboardData();
-  }, []);
+  //   fetchDashboardData();
+  // }, []);
 
   if (loading) {
     return <div className="p-8">Loading...</div>;
