@@ -53,26 +53,6 @@ Experience the Research Dashboard in action!
 
 ---
 
-## 🛠️ Installation
-
-To run the project locally, follow these steps:
-
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   ```
-2. **Navigate to the project directory:**
-   ```bash
-   cd research-dashboard
-   ```
-3. **Install the dependencies:**
-   ```bash
-   npm install
-   ```
-4. **Start the development server:**
-   ```bash
-   npm start
-   ```
 5. **Open your browser:**
    Visit [http://localhost:3000](http://localhost:3000) to view the application.
 
@@ -90,25 +70,4 @@ To run the project locally, follow these steps:
 
 ### State Management
 - **React Context API**
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! If you have suggestions for improvements or new features, please:
-
-1. Open an issue to discuss your ideas.
-2. Submit a pull request with your proposed changes.
-
----
-
-## 📜 License
-
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
-
----
-
-### ✨ Note
-
-Feel free to customize the live demo link and repository URL to match your actual project details.
 
