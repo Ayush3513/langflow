@@ -9,6 +9,13 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+     define: {
+     'process.env': {
+       VITE_LANGFLOW_BASE_URL: '/lf',
+       VITE_APPLICATION_TOKEN: JSON.stringify(process.env.VITE_APPLICATION_TOKEN),
+       VITE_GROQ_API_KEY: JSON.stringify(process.env.VITE_GROQ_API_KEY)
+     }
+   },
   server: {
     proxy: mode === 'development' ? {
       '/lf': {
