@@ -24,7 +24,13 @@ export default defineConfig(({ mode }) => ({
         target: 'https://api.langflow.astra.datastax.com',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/lf/, '/lf')
+        rewrite: (path) => path.replace(/^\/lf/, '/lf'),
+        // Add the following line to allow access from the specified domain
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            proxyReq.setHeader('Origin', 'https://langflow-flax.vercel.app');
+          });
+        }
       }
     }
   }
