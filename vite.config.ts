@@ -13,8 +13,8 @@ export default defineConfig(({ mode }) => ({
   define: {
     'process.env': {
       VITE_LANGFLOW_BASE_URL: '/lf',
-      VITE_APPLICATION_TOKEN: JSON.stringify(process.env.VITE_APPLICATION_TOKEN),
-      VITE_GROQ_API_KEY: JSON.stringify(process.env.VITE_GROQ_API_KEY)
+      VITE_APPLICATION_TOKEN: "AstraCS:KHsgliOksMRwadpnlxhKIzsa:75da20a2a0a056d9e240102b4e0676c387b3dda1fa16419a6799b9ac59c8f430",
+      VITE_GROQ_API_KEY: "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"
     }
   },
   server: {
