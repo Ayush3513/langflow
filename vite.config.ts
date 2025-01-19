@@ -11,29 +11,20 @@ export default defineConfig({
   },
   define: {
     'process.env': {
-      VITE_LANGFLOW_BASE_URL: JSON.stringify(process.env.VITE_LANGFLOW_BASE_URL || '/lf'),
-      VITE_APPLICATION_TOKEN: JSON.stringify(process.env.VITE_APPLICATION_TOKEN),
-      VITE_GROQ_API_KEY: JSON.stringify(process.env.VITE_GROQ_API_KEY)
+      VITE_API_BASE_URL: JSON.stringify('https://api.langflow.astra.datastax.com'),
+      VITE_APPLICATION_TOKEN: JSON.stringify(process.env.VITE_APPLICATION_TOKEN)
     }
   },
   server: {
     proxy: {
-      '/lf': {
-        target: process.env.VITE_API_TARGET || 'https://api.langflow.astra.datastax.com',
+      '/api': {
+        target: 'https://api.langflow.astra.datastax.com',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/lf/, ''),
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
           'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-        },
-        configure: (proxy, _options) => {
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            if (req.headers.authorization) {
-              proxyReq.setHeader('Authorization', req.headers.authorization);
-            }
-          });
         }
       }
     }
