@@ -12,9 +12,9 @@ export default defineConfig(({ mode }) => ({
   },
   define: {
     'process.env': {
-      NEXT_PUBLIC_LANGFLOW_BASE_URL: '/lf',
-      NEXT_PUBLIC_APPLICATION_TOKEN: JSON.stringify(process.env.NEXT_PUBLIC_APPLICATION_TOKEN),
-      NEXT_PUBLIC_GROQ_API_KEY: JSON.stringify(process.env.NEXT_PUBLIC_GROQ_API_KEY)
+      VITE_LANGFLOW_BASE_URL: '/lf',
+      VITE_APPLICATION_TOKEN: JSON.stringify(process.env.NEXT_PUBLIC_APPLICATION_TOKEN),
+      VITE_GROQ_API_KEY: JSON.stringify(process.env.NEXT_PUBLIC_GROQ_API_KEY)
     }
   },
   server: {
