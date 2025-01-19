@@ -19,47 +19,35 @@ import {
   ScatterChart,
   Scatter,
 } from "recharts";
-import { langflowService } from '../services/langflowService';
-import { 
-  mockDashboardTrendData, 
-  mockDashboardPieData, 
-  mockDashboardBarData 
-} from '../mockData';
+import {
+  mockDashboardTrendData,
+  mockDashboardPieData,
+  mockDashboardBarData,
+} from "../mockData";
 
 export const Dashboard: React.FC = () => {
   const [dashboardData, setDashboardData] = useState({
     trendData: mockDashboardTrendData,
     pieData: mockDashboardPieData,
-    barData: mockDashboardBarData
+    barData: mockDashboardBarData,
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   const fetchDashboardData = async () => {
-  //     try {
-  //       const data = await langflowService.fetchData('Generate dashboard data including trends, pie chart data, and bar chart data');
-  //       console.log('Fetched dashboard data:', data);
-        
-  //       if (!data?.pieData || !data?.trendData || !data?.barData) {
-  //         console.warn('Invalid data structure received:', data);
-  //         return;
-  //       }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000); // Set loading to false after one second
 
-  //       setDashboardData(data);
-  //     } catch (error) {
-  //       console.error('Error fetching dashboard data:', error);
-  //       setError('Failed to load dashboard data');
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchDashboardData();
-  // }, []);
+    return () => clearTimeout(timer); // Clear timeout on component unmount
+  }, []);
 
   if (loading) {
-    return <div className="p-8">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-4 border-blue-500"></div>
+      </div>
+    );
   }
 
   if (error) {
@@ -95,7 +83,7 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold text-gray-900 mb-8">Dashboard</h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <OverviewCard
           title="Total Research"

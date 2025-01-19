@@ -1,15 +1,15 @@
-import React from 'react';
-import { Target, AlertTriangle, TrendingUp } from 'lucide-react';
-import type { PainPoint } from '../types/research';
-import { mockPainPoints } from '../mockData';
+import React from "react";
+import { Target, AlertTriangle, TrendingUp } from "lucide-react";
+import type { PainPoint } from "../types/research";
+import { mockPainPoints } from "../mockData";
 
-const SeverityBadge: React.FC<{ severity: PainPoint['severity'] }> = ({
+const SeverityBadge: React.FC<{ severity: PainPoint["severity"] }> = ({
   severity,
 }) => {
   const colors = {
-    high: 'bg-red-100 text-red-800',
-    medium: 'bg-yellow-100 text-yellow-800',
-    low: 'bg-green-100 text-green-800',
+    high: "bg-red-100 text-red-800",
+    medium: "bg-yellow-100 text-yellow-800",
+    low: "bg-green-100 text-green-800",
   };
 
   return (
@@ -40,22 +40,26 @@ export const PainPoints: React.FC = () => {
           >
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h3 className="font-semibold text-gray-900">{painPoint.title}</h3>
+                <h3 className="font-semibold text-gray-900">
+                  {painPoint.title}
+                </h3>
                 <SeverityBadge severity={painPoint.severity} />
               </div>
               <AlertTriangle
                 className={`${
-                  painPoint.severity === 'high'
-                    ? 'text-red-500'
-                    : painPoint.severity === 'medium'
-                    ? 'text-yellow-500'
-                    : 'text-green-500'
+                  painPoint.severity === "high"
+                    ? "text-red-500"
+                    : painPoint.severity === "medium"
+                    ? "text-yellow-500"
+                    : "text-green-500"
                 }`}
                 size={20}
               />
             </div>
 
-            <p className="text-sm text-gray-500 mb-4">{painPoint.description}</p>
+            <p className="text-sm text-gray-500 mb-4">
+              {painPoint.description}
+            </p>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">

@@ -1,12 +1,34 @@
+import {
+  mockCompetitors,
+  mockMentions,
+  mockDashboardTrendData,
+  mockDashboardPieData,
+  mockDashboardBarData,
+} from "../mockData";
+
 export class LangflowClient {
   private baseURL: string;
   private applicationToken: string;
   private groqApiKey: string;
+  private cache: Map<string, { data: any; timestamp: number; }> | undefined;
+  private retryDelay: number = 1000;
 
   constructor() {
     this.baseURL = import.meta.env.VITE_LANGFLOW_BASE_URL || "/lf";
     this.applicationToken = import.meta.env.VITE_APPLICATION_TOKEN || "";
     this.groqApiKey = import.meta.env.VITE_GROQ_API_KEY || "";
+  }
+  private async delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  private getCachedData(prompt: string) {
+    const cached = this.cache?.get(prompt);
+    if (cached && Date.now() - cached.timestamp < 5 * 60 * 1000) {
+      // 5 minutes cache
+      return cached.data;
+    }
+    return null;
   }
 
   async fetchData(prompt: string): Promise<any> {
@@ -48,6 +70,15 @@ export class LangflowClient {
           }),
         }
       );
+      if (response.status === 500) {
+        console.error("Server error response:", await response.text());
+        return getMockData(prompt);
+      }
+
+      if (!response.ok) {
+        console.warn("API request failed, falling back to mock data");
+        return getMockData(prompt);
+      }
 
       const data = await response.json();
 
@@ -55,20 +86,28 @@ export class LangflowClient {
       console.log("Full response:", data);
 
       // Access the nested message content
-      const outputMessage = data.outputs[0].outputs[0].artifacts.message;
+      const outputMessage = data.outputs[0]?.outputs[0];
       console.log("Output message:", outputMessage);
-
-      // If you need to parse JSON from the message that's wrapped in code blocks
-      const jsonMatch = outputMessage.match(/```json\n([\s\S]*?)\n```/);
-      if (jsonMatch && jsonMatch[1]) {
-        const parsedData = JSON.parse(jsonMatch[1]);
-        console.log("Parsed JSON data:", parsedData);
-        return parsedData;
-      }
+      return outputMessage;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }
+}
+
+function getMockData(prompt: string) {
+  if (prompt.includes("dashboard")) {
+    return {
+      trendData: mockDashboardTrendData,
+      pieData: mockDashboardPieData,
+      barData: mockDashboardBarData,
+    };
+  } else if (prompt.includes("competitor")) {
+    return { competitors: mockCompetitors };
+  } else if (prompt.includes("social")) {
+    return { mentions: mockMentions };
+  }
+  return null;
 }
 
 export const langflowService = new LangflowClient();

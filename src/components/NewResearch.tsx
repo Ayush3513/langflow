@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import { langflowService } from "../services/langflowService";
 import { useStateContext } from "../context/ParsedDataContext";
@@ -15,7 +15,7 @@ export const NewResearch: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { setParsedData, parsedData } = useStateContext();
+  const { parsedData, setParsedData } = useStateContext();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,10 +27,12 @@ export const NewResearch: React.FC = () => {
     try {
       const data = await langflowService.fetchData(searchInput);
 
-      console.log("Processed research data:", data);
-      setParsedData(data);
-      // Handle successful response
-      // You could add navigation here or show success message
+      if (data) {
+        console.log("Processed research data:", data);
+        setParsedData(data); // Set the fetched data to the context
+      } else {
+        throw new Error("Invalid response from API");
+      }
     } catch (err) {
       setError("Failed to create research. Please try again.");
       console.error("Error creating research:", err);
@@ -39,9 +41,6 @@ export const NewResearch: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(parsedData);
-  });
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-2xl">
@@ -73,7 +72,52 @@ export const NewResearch: React.FC = () => {
           <div className="text-red-500 text-sm text-center mb-4">{error}</div>
         )}
 
+        {/* Render the fetched research data if it exists */}
         <div className="text-center">
+          <h2 className="text-lg font-semibold text-gray-700 mb-3">
+            Research Data
+          </h2>
+
+          {/* If loading */}
+          {loading && <p className="text-gray-600">Loading...</p>}
+
+          {/* If no data is available yet */}
+          {!loading && !parsedData && !error && (
+            <p className="text-gray-600">No research data available yet.</p>
+          )}
+
+          {/* If data is available */}
+          {parsedData && (
+            <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Research Title: {parsedData.title}
+              </h3>
+              <p className="text-sm text-gray-600 mb-2">
+                Source: {parsedData.source}
+              </p>
+              <p className="text-sm text-gray-600 mb-4">
+                Date: {parsedData.date}
+              </p>
+              <h4 className="font-medium text-gray-700 mb-2">Insights:</h4>
+
+              <div className="mt-4">
+                <h5 className="font-medium text-gray-700">Metrics:</h5>
+                <p className="text-sm text-gray-600">
+                  {parsedData.metrics?.views} views |{" "}
+                  {parsedData.metrics?.engagement} engagement
+                </p>
+              </div>
+              <ul className="list-disc pl-5 bg-black text-white">
+                {parsedData === ""
+                  ? parsedData
+                  : "worst langflow! data is not fetching not even possible to convert in json to visualize data"}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        {/* Related Suggestions */}
+        <div className="text-center mt-6">
           <h2 className="text-lg font-semibold text-gray-700 mb-3">
             Related Suggestions
           </h2>
