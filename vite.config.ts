@@ -13,8 +13,8 @@ export default defineConfig(({ mode }) => ({
   define: {
     'process.env': {
       VITE_LANGFLOW_BASE_URL: '/lf',
-      VITE_APPLICATION_TOKEN: JSON.stringify(process.env.NEXT_PUBLIC_APPLICATION_TOKEN),
-      VITE_GROQ_API_KEY: JSON.stringify(process.env.NEXT_PUBLIC_GROQ_API_KEY)
+      VITE_APPLICATION_TOKEN: JSON.stringify(process.env.VITE_APPLICATION_TOKEN),
+      VITE_GROQ_API_KEY: JSON.stringify(process.env.VITE_GROQ_API_KEY)
     }
   },
   server: {
