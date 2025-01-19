@@ -11,44 +11,21 @@ import {
   BarChart2,
   Settings,
   Crown,
+  GitBranch
 } from "lucide-react";
-import clsx from "clsx";
 
-interface NavItemProps {
-  to: string;
+interface MenuItem {
+  title: string;
   icon: React.ReactNode;
-  label: string;
+  path: string;
 }
-
-const NavItem: React.FC<NavItemProps> = ({ to, icon, label }) => {
-  const location = useLocation(); // React Router hook to get the current path
-
-  const isActive = location.pathname === to; // Check if the current route matches
-
-  return (
-    <li>
-      <Link
-        to={to}
-        className={clsx(
-          "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
-          isActive
-            ? "bg-indigo-50 text-indigo-700"
-            : "text-gray-700 hover:bg-gray-100"
-        )}
-      >
-        {icon}
-        <span className="font-medium">{label}</span>
-      </Link>
-    </li>
-  );
-};
 
 interface NavGroupProps {
   title: string;
   children: React.ReactNode;
 }
 
-const NavGroup: React.FC<NavGroupProps> = ({ title, children }) => (
+const NavGroup = ({ title, children }: NavGroupProps): JSX.Element => (
   <div className="mb-6">
     <h2 className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
       {title}
@@ -57,7 +34,34 @@ const NavGroup: React.FC<NavGroupProps> = ({ title, children }) => (
   </div>
 );
 
-export const Sidebar: React.FC = () => {
+interface NavItemProps {
+  to: string;
+  icon: React.ReactNode;
+  label: string;
+}
+
+const NavItem = ({ to, icon, label }: NavItemProps): JSX.Element => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+
+  return (
+    <li>
+      <Link
+        to={to}
+        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+          isActive
+            ? "bg-indigo-50 text-indigo-700"
+            : "text-gray-700 hover:bg-gray-100"
+        }`}
+      >
+        {icon}
+        <span className="font-medium">{label}</span>
+      </Link>
+    </li>
+  );
+};
+
+function Sidebar(): JSX.Element {
   return (
     <aside className="w-64 bg-white border-r border-gray-200 h-screen p-4">
       <div className="flex items-center gap-2 px-4 mb-8">
@@ -87,9 +91,9 @@ export const Sidebar: React.FC = () => {
             label="Social Listening"
           />
           <NavItem
-            to="/competitor"
-            icon={<Search size={20} />}
-            label="Competitor Research"
+            to="/workflow"
+            icon={<GitBranch size={20} />}
+            label="Workflow Automation"
           />
         </NavGroup>
 
@@ -126,4 +130,6 @@ export const Sidebar: React.FC = () => {
       </nav>
     </aside>
   );
-};
+}
+
+export default Sidebar;

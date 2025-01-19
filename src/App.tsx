@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Sidebar } from "./components/Sidebar";
 import { Dashboard } from "./components/Dashboard";
 import { NewResearch } from "./components/NewResearch";
 import YouTubeAnalysis from "./components/YouTubeAnalysis";
@@ -9,10 +8,12 @@ import { CompetitorResearch } from "./components/CompetitorResearch";
 import { PainPoints } from "./components/PainPoints";
 import { Trends } from "./components/Trends";
 import { Analytics } from "./components/Analytics";
-import { Settings } from "./components/Settings";
 import { UpgradePlan } from "./components/UpgradePlan";
+import WorkflowAutomation from './pages/WorkflowAutomation';
+import Sidebar from "./components/Sidebar";
+import { Settings } from './components/Settings';
 
-function App() {
+function App(): JSX.Element {
   return (
     <Router>
       <div className="flex h-screen bg-gray-50">
@@ -29,6 +30,7 @@ function App() {
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/upgrade" element={<UpgradePlan />} />
+            <Route path="/workflow" element={<WorkflowAutomation />} />
           </Routes>
         </main>
       </div>
