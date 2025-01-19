@@ -47,7 +47,6 @@ export class LangflowClient {
                   'Access-Control-Allow-Origin': '*',
                   'Access-Control-Allow-Headers': '*',
                   'Access-Control-Allow-Credentials': true,
-                  'Sec-Fetch-Site': cross-site,
     };
 
     // Check cache first
