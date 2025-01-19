@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Search } from "lucide-react";
 import { langflowService } from "../services/langflowService";
 import { useStateContext } from "../context/ParsedDataContext";
+import CompetitorTable from './CompetitorTable';
 
 const suggestions = [
   "Analyze top tech YouTubers",
@@ -15,6 +16,7 @@ export const NewResearch: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [rawData, setRawData] = useState<any>(null);
   const { parsedData, setParsedData } = useStateContext();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,16 +25,14 @@ export const NewResearch: React.FC = () => {
 
     setLoading(true);
     setError(null);
+    setRawData(null);
 
     try {
-      const data = await langflowService.fetchData(searchInput);
-
-      if (data) {
-        console.log("Processed research data:", data);
-        setParsedData(data); // Set the fetched data to the context
-      } else {
-        throw new Error("Invalid response from API");
-      }
+      const { outputMessage, artifacts } = await langflowService.fetchData(searchInput);
+      console.log("Output Message:", outputMessage);
+      console.log("Artifacts:", artifacts);
+      setParsedData(artifacts);
+      setRawData(artifacts);
     } catch (err) {
       setError("Failed to create research. Please try again.");
       console.error("Error creating research:", err);
@@ -40,6 +40,8 @@ export const NewResearch: React.FC = () => {
       setLoading(false);
     }
   };
+
+  const competitors = parsedData?.Competitors || [];
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -72,67 +74,24 @@ export const NewResearch: React.FC = () => {
           <div className="text-red-500 text-sm text-center mb-4">{error}</div>
         )}
 
-        {/* Render the fetched research data if it exists */}
-        <div className="text-center">
-          <h2 className="text-lg font-semibold text-gray-700 mb-3">
-            Research Data
-          </h2>
+        {loading && <p className="text-gray-600">Loading...</p>}
 
-          {/* If loading */}
-          {loading && <p className="text-gray-600">Loading...</p>}
-
-          {/* If no data is available yet */}
-          {!loading && !parsedData && !error && (
-            <p className="text-gray-600">No research data available yet.</p>
-          )}
-
-          {/* If data is available */}
-          {parsedData && (
-            <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                Research Title: {parsedData.title}
-              </h3>
-              <p className="text-sm text-gray-600 mb-2">
-                Source: {parsedData.source}
-              </p>
-              <p className="text-sm text-gray-600 mb-4">
-                Date: {parsedData.date}
-              </p>
-              <h4 className="font-medium text-gray-700 mb-2">Insights:</h4>
-
-              <div className="mt-4">
-                <h5 className="font-medium text-gray-700">Metrics:</h5>
-                <p className="text-sm text-gray-600">
-                  {parsedData.metrics?.views} views |{" "}
-                  {parsedData.metrics?.engagement} engagement
-                </p>
-              </div>
-              <ul className="list-disc pl-5 bg-black text-white">
-                {parsedData === ""
-                  ? parsedData
-                  : "worst langflow! data is not fetching not even possible to convert in json to visualize data"}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        {/* Related Suggestions */}
-        <div className="text-center mt-6">
-          <h2 className="text-lg font-semibold text-gray-700 mb-3">
-            Related Suggestions
-          </h2>
-          <div className="flex flex-wrap justify-center gap-2">
-            {suggestions.map((suggestion, index) => (
-              <button
-                key={index}
-                onClick={() => setSearchInput(suggestion)}
-                className="px-3 py-1 bg-white border border-gray-300 rounded-full text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              >
-                {suggestion}
-              </button>
-            ))}
+        {parsedData && (
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-700 mb-3">Competitors Data</h2>
+            <CompetitorTable competitors={competitors} />
           </div>
-        </div>
+        )}
+
+        {/* Raw Data Section */}
+        {rawData && (
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 mt-4">
+            <h2 className="text-lg font-semibold text-gray-700 mb-3">Raw API Response</h2>
+            <pre className="bg-gray-50 p-4 rounded overflow-auto max-h-96">
+              {JSON.stringify(rawData, null, 2)}
+            </pre>
+          </div>
+        )}
       </div>
     </div>
   );
