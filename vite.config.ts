@@ -9,6 +9,11 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+   headers: {
+          'Access-Control-Allow-Origin': 'https://langflow-flax.vercel.app/',
+          'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        },
   define: {
     'process.env': {
       VITE_API_BASE_URL: JSON.stringify('https://api.langflow.astra.datastax.com'),
