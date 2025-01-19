@@ -43,7 +43,11 @@ export class LangflowClient {
 
     const headers = {
       Authorization: `Bearer ${this.applicationToken}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Headers': '*',
+                  'Access-Control-Allow-Credentials': true,
+                  'Sec-Fetch-Site': cross-site,
     };
 
     // Check cache first
